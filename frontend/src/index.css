@@ -1,0 +1,18 @@
+@import "tailwindcss";
+@plugin "daisyui" {
+  themes: cupcake --default;
+}
+
+@layer utilities{
+    .max-container{
+        max-width: 1440px;
+        margin: 0 auto;
+    }
+
+    .padding-x{
+        @apply px-8 sm:px-16
+    }
+    .padding-y{
+        @apply py-8 sm:py-16
+    }
+}
