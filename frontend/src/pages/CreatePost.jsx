@@ -4,10 +4,15 @@ import { preview } from "../assets";
 import { getRandomPrompt } from "../utils/index.js";
 import FormField from "../components/FormField";
 import Loader from "../components/Loader";
+import { useMutation } from "@tanstack/react-query";
+import axios from '../lib/axios.js'
 const CreatePost = () => {
   const navigate = useNavigate();
   const [generatingImg, setGeneratingImg] = useState(false);
   const [loading, setLoading] = useState(false);
+
+ 
+
   const [form, setForm] = useState({
     name: "",
     prompt: "",
@@ -19,6 +24,19 @@ const CreatePost = () => {
     setForm({ ...form, prompt: randomPrompt });
   };
 
+
+   const generateImageMutation = useMutation({
+    mutationFn: async (e)=>{
+        e.preventDefault();
+        try {
+          const res = await axios.post(`/dalle/generateImage`, {prompt: form.prompt})
+          console.log(res.data)
+        } catch (error) {
+            console.log('Error Generating Image');
+        }
+    }
+  })
+
   return (
     <section>
       <div>
@@ -27,7 +45,7 @@ const CreatePost = () => {
           Create imaginative and visually stunning images through DALL-E AI
         </p>
       </div>
-      <form className="mt-16 max-w-3xl">
+      <form  className="mt-16 max-w-3xl">
         <FormField
           label="Yourname"
           type="text"
@@ -76,6 +94,7 @@ const CreatePost = () => {
           <button
             type="button"
             className="text-white bg-green-700 text-sm font-medium rounded-md w-full sm:w-auto px-5 py-2.5 text-center"
+            onClick={generateImageMutation.mutate}
             disabled={generatingImg}
           >
             {generatingImg ? "Generating..." : "Generate Image"}
